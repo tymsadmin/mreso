@@ -1,0 +1,84 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\footskip}{1.5cm}
+\usepackage{XCharter}
+
+\geometry{
+  top=2cm,
+  bottom=1.5cm,
+  left=4cm,
+  right=4cm,
+  includefoot
+}
+
+\begin{document}
+
+\section*{Questions du deuxième TP}
+
+\subsection*{Q1}
+\textbf{Question :} Nombre de tweets publiés.\\
+\textbf{Nombre de lignes attendues :} 1 (1~colonne)
+
+\subsection*{Q2}
+\textbf{Question :} Début et fin de la collecte des données.\\
+\textbf{Nombre de lignes attendues :} 1 (2~colonnes)
+
+\subsection*{Q3}
+\textbf{Question :} Personnes avec leur biographie et leur localisation.\\
+\textbf{Nombre de lignes attendues :} 16 (3~colonnes)
+
+\subsection*{Q4}
+\textbf{Question :} Tweets les plus retweetés, ex æquo départagés par nombre de favoris.\\
+\textbf{Nombre de lignes attendues :} 18\,816 (4~colonnes : Personne, nbRetweet, nbFavorite, tweet)
+
+\subsection*{Q5}
+\textbf{Question :} Idem que Q4, mais en excluant les Retweets.\\
+\textbf{Nombre de lignes attendues :} 12\,320 (4~colonnes)
+
+\subsection*{Q6}
+\textbf{Question :} Tweets mentionnant l’Occitanie.\\
+\textbf{Nombre de lignes attendues :} 2 (3~colonnes : date, personne, tweet)
+
+\subsection*{Q7}
+\textbf{Question :} Tweets mentionnant le hashtag \#migrants.\\
+\textbf{Nombre de lignes attendues :} 84 (3~colonnes : date, personne, tweet)
+
+\subsection*{Q8}
+\textbf{Question :} Langues repérées dans les tweets de l’utilisateur \texttt{@JM\_Governatori}.\\
+\textbf{Nombre de lignes attendues :} 22 (1~colonne)
+
+\subsection*{Q9}
+\textbf{Question :} Lignes de la table qui ne sont pas des Retweets et qui mentionnent le compte \texttt{@realDonaldTrump}.\\
+\textbf{Nombre de lignes attendues :} 5 (14~colonnes)
+
+\subsection*{Q10}
+\textbf{Question :} Nombre de tweets par personne, avec leur date de premier tweet.\\
+\textbf{Nombre de lignes attendues :} 16 (3~colonnes)
+
+\subsection*{Q11}
+\textbf{Question :} Nombre maximal de retweets et de favoris par personne, trié pour obtenir les plus visibles en haut.\\
+\textbf{Nombre de lignes attendues :} 16 (3~colonnes)
+
+\subsection*{Q12}
+\textbf{Question :} Nombre de tweets et de personnes ayant twitté par mois, trié par ordre chronologique.\\
+\textbf{Nombre de lignes attendues :} 75 (3~colonnes)
+
+\subsection*{Q13}
+\textbf{Question :} Taille moyenne des tweets et nombre de tweets (sans les Retweets) par personne, pour celles qui ont posté 100 tweets ou plus.\\
+\textbf{Nombre de lignes attendues :} 12 (3~colonnes)
+
+\subsection*{Q14}
+\textbf{Question :} Comptes retweetés par une personne donnée (identifiés par \texttt{"RT @compteRetweeté"}).\\
+\textbf{Nombre de lignes attendues :} 267 (2~colonnes)
+
+\subsection*{Q15}
+\textbf{Question :} Dispositifs les plus utilisés par personne (Personne, source, nbTweets).\\
+\textbf{Nombre de lignes attendues :} 84 (3~colonnes)
+
+\end{document}
