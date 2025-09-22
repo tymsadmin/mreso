@@ -1,0 +1,193 @@
+% --------------------------------------------------------------
+% Curriculum Vitae – Ariane Dumas (SOTA & compilable)
+% --------------------------------------------------------------
+% pdfLaTeX – TeX Live 2025 compatible
+% --------------------------------------------------------------
+
+% Sécure pour hyperref + hypersetup
+\PassOptionsToPackage{unicode}{hyperref}
+
+\documentclass[11pt,a4paper,sans]{moderncv}
+
+% ----------------------------------------------------------------
+% Configuration
+% ----------------------------------------------------------------
+\moderncvstyle{banking}
+\moderncvcolor{black} % titres et accents en NOIR
+
+% Marges demandées (verticales et latérales) + hauteur arrondie à la ligne
+\usepackage[top=2.2cm,bottom=2.4cm,left=4.8cm,right=4.8cm,heightrounded]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{enumitem}
+\usepackage{xurl}          % casse automatiquement les URLs longues
+\usepackage{xcolor}        % pour \textcolor, \fcolorbox
+\usepackage{hyperref}      % une seule fois, sans options (unicode déjà passé)
+\usepackage{needspace}     % évite les coupures moches
+
+% --- Couleurs
+\definecolor{cvgray}{HTML}{6E6E73}
+\definecolor{cvblue}{HTML}{0A66C2} % bleu lien
+
+% --- Hyperliens : pas de rectangle d’annotation (on dessine notre propre encadré)
+\hypersetup{
+  pdfauthor   = {Ariane Dumas},
+  pdftitle    = {CV Ariane Dumas},
+  pdfsubject  = {Communication · Administration · Ex-cheffe de cuisine · Bilingue FR/ES},
+  pdfkeywords = {communication, administration, management, cuisine, logistique, bilingue},
+  colorlinks=false,
+  pdfborder={0 0 0}
+}
+
+% --- LISTES : puces petites, pas de débordement, espacement serré
+\newcommand{\cvdot}{\raisebox{0.25ex}{\tiny\textbullet}}
+\setlist[itemize]{%
+  label=\cvdot,
+  labelsep=0.6em,
+  leftmargin=1.2em,
+  itemsep=0.18em,
+  topsep=0pt,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+% --- Sections : le titre voyage avec la 1re entrée
+\newcommand{\cvsection}[1]{%
+  \Needspace{16\baselineskip}% réserve titre + début de 1re entrée
+  \section{#1}\nopagebreak\vspace{-0.3\baselineskip}%
+}
+
+% --- Réserve minimale avant une entrée (à partir de la 2e)
+\newcommand{\cvneed}{\Needspace{11\baselineskip}}
+
+% --- Petit blanc entre deux expériences (espace "intelligent")
+\newcommand{\cventrygap}{\addvspace{0.6\baselineskip}}
+
+% --- Organisation : retour à la ligne auto si place limitée
+\newcommand{\orgwrap}[1]{%
+  \parbox[t]{.66\maincolumnwidth}{\raggedright #1}%
+}
+
+% --- Lien "badge" encadré bleu, visible partout
+\newcommand{\cvurl}[1]{%
+  \begingroup
+    \setlength{\fboxsep}{1.5pt}% padding interne
+    \fcolorbox{cvblue}{white}{\href{https://#1}{\texttt{#1}}}%
+  \endgroup
+}
+
+% --- Séparateur du TITRE SEULEMENT : point plus petit
+\DeclareRobustCommand{\cvsep}{%
+  \thinspace\raisebox{0.2\baselineskip}{\normalsize\textbullet}\thinspace%
+}
+
+% --- Icônes SEULES en gris (le texte reste noir)
+\makeatletter
+\let\phonesymbol@orig\phonesymbol
+\renewcommand*{\phonesymbol}{\textcolor{cvgray}{\phonesymbol@orig}}
+\let\mobilephonesymbol@orig\mobilephonesymbol
+\renewcommand*{\mobilephonesymbol}{\textcolor{cvgray}{\mobilephonesymbol@orig}}
+\let\emailsymbol@orig\emailsymbol
+\renewcommand*{\emailsymbol}{\textcolor{cvgray}{\emailsymbol@orig}}
+\let\addresssymbol@orig\addresssymbol
+\renewcommand*{\addresssymbol}{\textcolor{cvgray}{\addresssymbol@orig}}
+\makeatother
+
+% ----------------------------------------------------------------
+% Données personnelles
+% ----------------------------------------------------------------
+\firstname{\textcolor{cvgray}{Ariane}} % seul le prénom est gris
+\familyname{Dumas}
+\title{Communication \& administration \cvsep Bilingue FR/ES \cvsep Ex-cheffe de cuisine \cvsep 10 ans de management}
+\address{12\,Rue des Églantines}{75011 Paris}{France}
+\mobile{06 12 34 56 78}
+\email{ariane.dumas@example.com}
+% \photo[64pt][0.4pt]{photo.jpg}
+
+% ----------------------------------------------------------------
+\begin{document}
+\makecvtitle
+\vspace*{-0.6\baselineskip} % resserre le blanc sous le titre du document
+\recomputelengths
+
+% ----------------------------------------------------------------
+\cvsection{Profil}
+Ancienne \textbf{cheffe de cuisine} (10 ans de coordination d’équipe et de service client en France et à l’international), \textbf{bilingue français-espagnol}, je me spécialise aujourd’hui dans la \textbf{communication opérationnelle} et l’appui administratif. Sens de l’organisation, leadership terrain et storytelling culinaire m’ont dotée d’une forte capacité à fédérer, transmettre et gérer l’urgence avec calme.
+
+% ----------------------------------------------------------------
+\cvsection{Compétences clés}
+\cvitem{}{%
+  \begin{itemize}
+    \item Communication écrite / orale, création de contenus, relations usagers
+    \item Management d’équipes (5–10 personnes), coaching, médiation interculturelle
+    \item Planification logistique, gestion d’achats et de budgets (–15\,\% coûts matières)
+    \item Organisation d’événements (30–300 personnes) et coordination terrain
+    \item Maîtrise normes qualité / HACCP, suivi de process et reporting clair
+    \item Adaptabilité, apprentissage rapide, esprit d’initiative
+  \end{itemize}}
+
+% ----------------------------------------------------------------
+\cvsection{Formations}
+\cvitem{2017 -- 2018}{Formation en Gastronomie – \emph{Institut Culinaire Méridien} (Mexique)}
+\cvitem{2014 -- 2016}{Bac + 2 Psychologie – \emph{Université de Santa Alegría} (Colombie)}
+\cvitem{2008}{Baccalauréat – Colombie}
+
+% ----------------------------------------------------------------
+\cvsection{Expériences professionnelles}
+
+% 1) Cheffe de cuisine — PAS de \cvneed ici (réserve déjà faite par \cvsection)
+\cventry{2018 — présent}{\textbf{Cheffe de cuisine / Responsable de cuisine}}{\orgwrap{Le Pavillon Orfèvre ; Les Ateliers Nomades}}{Lyon, France}{}{%
+  \begin{itemize}
+    \item Pilotage de brigades (5–10 personnes), briefings quotidiens, storytelling menu
+    \item Gestion achats (600 kg/mois) ; optimisation fournisseurs → –15\,\% coûts matières
+    \item Audits HACCP : conformité \(>\)\,98\,\%
+    \item \textbf{Taux de satisfaction client \(>\)\,95\,\%} (avis vérifiés) via expérience utilisateur soignée
+    \item Habileté manuelle et précision (cuisine gastronomique, pâtisserie fine)
+    \item Formation et onboarding de 20+ collaborateurs multiculturels
+  \end{itemize}}
+
+% Petit blanc entre les deux expériences :
+\cventrygap
+
+% 2) ONG
+\cvneed
+\cventry{avril 2016 — octobre 2017}{\textbf{Assistante polyvalente}}{\orgwrap{Fondation Horizon Urbain (ONG)}}{Medellín, Colombie}{}{%
+  {\footnotesize\makebox[\linewidth][r]{\cvurl{horizonurbain.org}}}\vspace{0.25\baselineskip}
+  \begin{itemize}
+    \item Gestion d’agendas, accueil trilingue et rédaction de communiqués pour projets citoyens
+    \item Organisation d’événements culturels internationaux (30–300 participants)
+    \item Transcriptions, comptes rendus publics et animation des réseaux sociaux naissante
+  \end{itemize}}
+
+% ----------------------------------------------------------------
+\cvsection{Langues}
+\cvitem{}{%
+  \begin{itemize}
+    \item Français — C2
+    \item Espagnol — Langue maternelle
+    \item Anglais — B1/B2
+  \end{itemize}}
+
+% ----------------------------------------------------------------
+\cvsection{Outils numériques}
+\cvitem{}{%
+  \begin{itemize}
+    \item Suite Microsoft Office (Excel 4/5 · Word 4/5)
+    \item Google Workspace 4/5
+    \item Trello · Slack 4/5
+    \item Notion 3/5 · Canva 3/5
+    \item DaVinci Resolve 2/5
+  \end{itemize}}
+
+% ----------------------------------------------------------------
+\cvsection{Autres informations}
+\cvitem{}{%
+  \begin{itemize}
+    \item Permis B
+    \item Bonne condition physique
+    \item Sciences humaines ; lifestyle healthy
+  \end{itemize}}
+
+\end{document}
