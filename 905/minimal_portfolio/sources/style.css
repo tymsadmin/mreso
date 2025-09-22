@@ -1,0 +1,450 @@
+/* =================================================================
+   Portfolio Minimaliste - CSS Principal
+   ================================================================= */
+
+/* Variables CSS pour faciliter la maintenance */
+:root {
+    --color-primary: #000;
+    --color-secondary: #333;
+    --color-background: #fff;
+    --color-hover: #f5f5f5;
+    --color-border: #ddd;
+    
+    --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+    
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    --max-width: 1200px;
+    --border-radius: 3px;
+}
+
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-main);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-primary);
+    background-color: var(--color-background);
+    min-height: 100vh;
+}
+
+/* Conteneur principal */
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+/* Navigation */
+.nav-wrapper {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-background);
+    z-index: 100;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-projects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) 0;
+    list-style: none;
+}
+
+/* Séparateur visuel pour grouper les projets */
+.nav-link {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+/* Séparateur entre certains projets */
+.nav-link[data-page="nonfitteddynamicsmassivemicrocosms"]::after,
+.nav-link[data-page="scaleentanglement"]::after {
+    content: "•";
+    position: absolute;
+    right: -0.75rem;
+    color: var(--color-border);
+    pointer-events: none;
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-hover);
+}
+
+.nav-link.active {
+    color: var(--color-primary);
+    font-weight: 600;
+    background-color: var(--color-hover);
+}
+
+/* Contenu principal */
+.content {
+    display: grid;
+    gap: var(--spacing-md);
+    margin-top: 0;
+}
+
+/* Texte principal */
+.main-text {
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+.main-text h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    
+    /* Éviter les titres orphelins */
+    break-inside: avoid;
+    break-after: avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+}
+
+.main-text h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+    /* Éviter les titres orphelins */
+    break-inside: avoid;
+    break-after: avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+}
+
+.main-text p {
+    margin-bottom: var(--spacing-md);
+}
+
+.main-text a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+.main-text a:hover {
+    color: var(--color-primary);
+}
+
+/* Colonnes de texte responsives */
+.columns-text {
+    column-gap: var(--spacing-xl);
+    
+    /* Éviter les ruptures de contenu problématiques */
+    orphans: 3;
+    widows: 3;
+}
+
+/* Medias */
+.media-wrapper {
+    width: 100%;
+    margin: 0;
+}
+
+.media-wrapper img,
+.media-wrapper video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Contrôles media */
+.media-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+.media-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--color-secondary);
+    transition: all 0.2s ease;
+}
+
+.media-button:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.media-button.active {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Écran de chargement minimaliste */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-text {
+    font-size: 0.875rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Page d'index */
+.index-header {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.index-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    list-style: none;
+}
+
+.project-item a {
+    display: block;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-secondary);
+    transition: all 0.2s ease;
+}
+
+.project-item a:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-hover);
+    color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+    
+    .nav-projects {
+        gap: 2px;
+    }
+    
+    .nav-link {
+        font-size: 0.625rem;
+        padding: var(--spacing-xs);
+    }
+    
+    .main-text h1 {
+        font-size: 1.25rem;
+    }
+    
+    .columns-text {
+        column-count: 1 !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .columns-text {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1025px) {
+    .columns-text {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1400px) {
+    .columns-text {
+        column-count: 4;
+    }
+}
+
+/* Tags de statut */
+.status-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--border-radius);
+    margin-left: var(--spacing-sm);
+    vertical-align: middle;
+}
+
+.status-tag.experimental {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-tag.research {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-tag.published {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Sous-titre et métadonnées */
+.project-meta {
+    font-size: 0.875rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.authors {
+    font-style: italic;
+}
+
+/* Utilitaires */
+.hidden {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+
+/* Règles anti-orphelins pour tous les titres */
+.main-text h1 + p,
+.main-text h2 + p,
+.main-text h3 + p {
+    /* Garder le premier paragraphe avec son titre */
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.main-text h3 {
+    /* Même règles que h2 pour h3 */
+    break-inside: avoid;
+    break-after: avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+}
+
+/* Éviter les petits bouts de texte isolés */
+.main-text p {
+    orphans: 2;
+    widows: 2;
+}
+
+/* Garder les listes ensemble */
+.main-text ul,
+.main-text ol {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-left: 1.5rem;
+    padding-left: 0;
+}
+
+.main-text ul li,
+.main-text ol li {
+    margin-bottom: 0.5rem;
+    list-style-position: inside;
+}
+
+/* Plus de contrôle sur les colonnes */
+.columns-text > * {
+    break-inside: avoid-column;
+    page-break-inside: avoid;
+}
+
+/* Animations subtiles */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Amélioration de l'accessibilité */
+:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Support du mode sombre (optionnel) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: #fff;
+        --color-secondary: #ccc;
+        --color-background: #000;
+        --color-hover: #111;
+        --color-border: #333;
+    }
+}
+
+/* Print styles */
+@media print {
+    .nav-wrapper,
+    .media-controls,
+    .loading {
+        display: none;
+    }
+    
+    body {
+        color: #000;
+        background: #fff;
+    }
+}
