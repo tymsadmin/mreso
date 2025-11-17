@@ -184,36 +184,44 @@ The script automatically performs:
 7. **Score propagation** to near‑duplicates, handling of republications and fine‑grained deduplication.
 8. **Export** of matrices and metric tables as CSV files.
 
-At the end, a success message is printed and all results are stored in `RESULTS_ROOT/DATASET_NAME`.
+At the end, a success message is printed and all results are stored in `RESULTS_ROOT/DATASET_NAME/config_XXXXXXXX/` (where `XXXXXXXX` is the configuration hash, see section 7).
 
 ---
 
-## 6. Quickly inspect results
+## 6. Cache system
 
-The script `sources/show_results.py` (if present) lets you inspect results for a given number of topics.
+The script uses a **smart caching mechanism** to avoid reprocessing data when only modeling parameters change.
 
-1. Open `sources/show_results.py` and set:
+### How it works
 
-```python
-N_TOPICS = 7  # must match a value from TOPIC_LIST
+When you run the script, preprocessing results (extraction + lemmatization) are cached in the `cache/` directory:
+
+```text
+cache/
+└── preprocessing_XXXXXXXX.pkl
 ```
 
-2. Run the script:
+The cache key (8-character hash) is computed from:
+- `SOURCE_TYPE` (europresse, istex, or csv)
+- `LANGUAGE` (fr, en)
+- `MIN_CHARS` and `MAX_CHARS`
+- `KEEP_POS` (POS tags to keep)
+- `FAST_LEMMATIZATION`
+- Source file paths and their modification times
+
+### Benefits
+
+If you change only TF-IDF or NMF parameters (e.g., `TFIDF_MAX_DF`, `TOPIC_LIST`, `LSH_THRESHOLD`), the cache is reused and **extraction/lemmatization are skipped**, saving significant time on large corpora.
+
+### Cache reset
+
+To force reprocessing from scratch (e.g., after updating source files):
 
 ```bash
-uv run python -m sources.show_results
+uv run python -m sources.topic_modeling_nmf --reset
 ```
 
-The script prints:
-- the **global quality metrics** for `N_TOPICS` (coherences `c_v` and `c_npmi`),
-- the **top 15 words per topic** (from the compact H matrix),
-- a preview of the **W matrix** (topic distribution over 30 documents),
-- for each topic, **the number of documents** where it is dominant.
-
-This is the easiest way to build intuition about:
-- the right range for `N_TOPICS`,
-- the semantic coherence of the topics,
-- how topics are distributed in the corpus.
+This deletes the cache and regenerates all preprocessing data.
 
 ---
 
@@ -222,24 +230,46 @@ This is the easiest way to build intuition about:
 For a dataset named `DATASET_NAME` (e.g. `"menopause"`) and a results folder `RESULTS_ROOT` (default `"results"`), the structure is:
 
 ```text
+cache/
+└── preprocessing_XXXXXXXX.pkl
+
 results/
 └── DATASET_NAME/
-    ├── journal_min_max_dates.csv
-    ├── topic_quality_summary.csv
-    ├── 5t/
-    │   ├── W_documents_topics.csv
-    │   └── H_topics_terms.csv
-    ├── 7t/
-    │   ├── ...
-    └── ...
+    └── config_XXXXXXXX/
+        ├── config_params.json
+        ├── topic_quality_summary_top{EVAL_TOP_N_WORDS}.csv
+        ├── journal_min_max_dates.csv
+        ├── 5t/
+        │   ├── W_documents_topics.csv
+        │   └── H_topics_terms.csv
+        ├── 7t/
+        │   ├── W_documents_topics.csv
+        │   └── H_topics_terms.csv
+        └── ...
 ```
 
-- **`topic_quality_summary.csv`**: summary table of quality metrics for each `k` in `TOPIC_LIST` (one row per configuration).
-- **`journal_min_max_dates.csv`**: for each journal, min / max dates of presence in the corpus (useful for temporal analyses).
-- For each `k` (e.g. `7t/`):
-  - `W_documents_topics.csv`: W matrix **enriched** with metadata (title, journal, date, etc. for Europresse/ISTEX, original CSV columns for `SOURCE_TYPE="csv"`) + `Topic_i` columns; includes `Main_topic_index` (dominant topic).
+### Configuration-specific folders
+
+Results are organized by **configuration hash** to prevent overwriting when you change parameters. Each `config_XXXXXXXX/` folder corresponds to a unique combination of:
+- TF-IDF parameters (`TFIDF_MAX_DF`, `TFIDF_MIN_DF`, `TFIDF_MAX_FEATURES`, etc.)
+- Lemmatization parameters (`LANGUAGE`, `KEEP_POS`, `FAST_LEMMATIZATION`)
+- Document filtering (`MIN_CHARS`, `MAX_CHARS`)
+- LSH deduplication settings (`GO_REMOVE_NEAR_DUPLICATES`, `LSH_THRESHOLD`, `LSH_NUM_PERM`, `LSH_MAX_TOKENS`)
+
+This allows you to **compare different configurations** for the same dataset without losing previous results.
+
+### Files in each configuration folder
+
+- **`config_params.json`**: complete traceability file containing all parameters used for this configuration (TF-IDF, NMF, lemmatization, evaluation). Essential for reproducibility and comparison between runs.
+
+- **`topic_quality_summary_top{EVAL_TOP_N_WORDS}.csv`**: global summary of quality metrics for each `k` in `TOPIC_LIST` (one row per number of topics). The filename includes the `EVAL_TOP_N_WORDS` parameter (e.g., `topic_quality_summary_top15.csv`).
+
+- **`journal_min_max_dates.csv`**: for each journal, min/max publication dates in the corpus (useful for temporal analyses, generated for Europresse sources only).
+
+- **For each `k` in `TOPIC_LIST`** (e.g., `5t/`, `7t/`):
+  - `W_documents_topics.csv`: W matrix **enriched** with metadata (title, journal, date, etc. for Europresse/ISTEX; original CSV columns for `SOURCE_TYPE="csv"`) + `Topic_i` columns; includes `Main_topic_index` (dominant topic).
   - `H_topics_terms.csv`: compact H matrix, containing only the `N_TOP_WORDS` best terms per topic (two columns per topic: `Topic_k_Term`, `Topic_k_Weight`).
-  - `topic_quality_config.csv` (optional, if `SAVE_TOPIC_LEVEL_METRICS = True`): detailed metrics for this configuration (same families as the global summary, but restricted to this specific `k`).
+  - `topic_quality_config.csv` (optional, if `SAVE_TOPIC_LEVEL_METRICS = True`): detailed metrics for this specific `k`.
 
 ---
 
@@ -256,45 +286,17 @@ results/
   - rows are ordered from the most to the least important word.
 
 In practice, for qualitative analysis:
-- use `H_topics_terms.csv` to **read the topics** (in the corresponding `kt` folder);
+- use `H_topics_terms.csv` to **read the topics** (in the corresponding `{k}t/` folder, e.g., `5t/` for 5 topics);
 - use `W_documents_topics.csv` to **see which documents carry which topics**, filtering by journal, date, etc.
 
 ---
 
 ## 9. Going further
 
-- Change `TOPIC_LIST` and observe how metrics evolve in `topic_quality_summary.csv`.
-
----
-
-## 10. Migration from previous versions
-
-In older versions, output files could be named:
-- `DATASET_NAME_topic_quality_summary.csv` (instead of `topic_quality_summary.csv`);
-- `matrice_W_documents_topics_ktc.csv` and `matrice_H_topics_mots_ktc.csv` or `matrice_W_documents_topics.csv` / `matrice_H_topics_mots.csv` (instead of the new English names in each `kt/` folder);
-- `topic_quality_ktc.csv` in each `kt/` folder (replaced by `topic_quality_config.csv` when `SAVE_TOPIC_LEVEL_METRICS = True`).
-
-Older `topic_quality_*.csv` files may contain additional columns (e.g. lexical diversity, entropy, cosine similarities, `u_mass`) that are no longer computed in the current version, where topic quality is restricted to coherences `c_v` and `c_npmi`.
-
-To homogenize an existing `results/` folder and migrate to the current naming scheme, you can run from the project root:
-
-```bash
-# From the project root
-find results -name '*_topic_quality_summary.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$d/topic_quality_summary.csv\"; done' bash {} +
-
-find results -name 'matrice_W_documents_topics_*tc.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$d/W_documents_topics.csv\"; done' bash {} +
-find results -name 'matrice_W_documents_topics.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$(dirname \"$f\")/W_documents_topics.csv\"; done' bash {} +
-
-find results -name 'matrice_H_topics_mots_*tc.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$d/H_topics_terms.csv\"; done' bash {} +
-find results -name 'matrice_H_topics_mots.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$(dirname \"$f\")/H_topics_terms.csv\"; done' bash {} +
-
-find results -name 'topic_quality_*tc.csv' -exec bash -lc 'for f; do d=\"$(dirname \"$f\")\"; mv \"$f\" \"$(dirname \"$f\")/topic_quality_config.csv\"; done' bash {} +
-```
-
+- Change `TOPIC_LIST` and observe how metrics evolve in `topic_quality_summary_top{EVAL_TOP_N_WORDS}.csv`.
 - Experiment with `TFIDF_MAX_DF`, `TFIDF_MIN_DF` and `TFIDF_MAX_FEATURES` to adjust topic granularity.
 - Change `KEEP_POS` (e.g. add adjectives) to see the effect on topics.
 - Disable deduplication (`GO_REMOVE_NEAR_DUPLICATES = False`) to understand its impact on results.
 
 The low‑level code (extraction, deduplication, metrics) is intentionally factored and commented in `sources/` so it can serve as a **pedagogical support** if you want to dive into internal details.
-
 
