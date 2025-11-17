@@ -69,13 +69,20 @@ HTML_FOLDER = "html_sources"
 
 The script:
 - splits each HTML file into articles,
-- cleans the text (URLs, multiple spaces, etc.),
+- cleans the text in depth (URLs, multiple spaces, removal of all unnecessary HTML tags),
 - extracts metadata (title, journal, date, authors),
 - detects republications (same article appearing in other newspapers).
 
 ### 3.2 ISTEX (JSON + text)
 
-Organize your ISTEX data as follows (minimal example):
+#### Downloading from ISTEX platform
+
+1. Go to the [ISTEX platform](https://www.istex.fr/) and perform your corpus query.
+2. When exporting results, **select both formats**: `cleaned` (cleaned full text) and `json` (metadata).
+3. Download the resulting archive(s) and extract them.
+4. Place the extracted subdirectories directly into the `istex_sources/` folder.
+
+The resulting structure will look like:
 
 ```text
 istex_sources/
@@ -89,6 +96,8 @@ istex_sources/
     └── article3.json
 ```
 
+#### Configuration
+
 In `sources/params.py`:
 
 ```python
@@ -96,10 +105,10 @@ SOURCE_TYPE = "istex"
 ISTEX_FOLDER = "istex_sources"
 ```
 
-For each `.cleaned` / `.json` pair, the script:
-- cleans the text (URLs, spaces, etc.),
-- extracts relevant metadata from the JSON files,
-- filters out documents that are too short/long.
+The script automatically detects all `.cleaned` / `.json` pairs in subdirectories. For each pair:
+- loads the cleaned full text,
+- extracts relevant metadata from the JSON files (title, authors, date, journal, etc.),
+- filters out documents that are too short/long (`MIN_CHARS` / `MAX_CHARS`).
 
 ### 3.3 CSV (tabular text + metadata)
 
