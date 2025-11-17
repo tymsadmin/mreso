@@ -69,8 +69,8 @@ HTML_FOLDER = "html_sources"
 
 The script:
 - splits each HTML file into articles,
-- cleans the text in depth (URLs, multiple spaces, removal of all unnecessary HTML tags),
-- extracts metadata (title, journal, date, authors),
+- cleans the text in depth (URLs, multiple spaces, removal of all unnecessary HTML tags, etc.),
+- extracts metadata (title, journal, date, authors, etc.),
 - detects republications (same article appearing in other newspapers).
 
 ### 3.2 ISTEX (JSON + text)
