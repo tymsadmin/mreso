@@ -156,6 +156,9 @@ This is the **only file you need to edit** to run experiments. Key parameters:
   - `TFIDF_MAX_DF`: ignore words present in more than X% of documents (default 0.95).
   - `TFIDF_MIN_DF`: ignore words present in fewer than N documents (default 3).
   - `TFIDF_MAX_FEATURES`: maximum vocabulary size (default 5000).
+  - `TFIDF_SUBLINEAR_TF`: if `True`, down-weights very frequent words using \(1 + \log(tf)\) instead of raw term frequency (default `False`).
+  - `TFIDF_NORM`: normalization of TF-IDF document vectors. Options: `"l2"` (Euclidean norm, recommended), `"l1"` (Manhattan norm), or `None` (no normalization, keeps raw values). Default: `None`.
+  - `TFIDF_SMOOTH_IDF`: if `True`, smooths IDF weights by adding 1 to document frequencies to avoid zero divisions and reduce weight of very rare terms (default `True`).
 
 - **NMF**
   - `TOPIC_LIST`: list of topic counts to test (e.g. `[5, 10, 20]`).
@@ -260,7 +263,7 @@ results/
 ### Configuration-specific folders
 
 Results are organized by **configuration hash** to prevent overwriting when you change parameters. Each `config_XXXXXXXX/` folder corresponds to a unique combination of:
-- TF-IDF parameters (`TFIDF_MAX_DF`, `TFIDF_MIN_DF`, `TFIDF_MAX_FEATURES`, etc.)
+- TF-IDF parameters (`TFIDF_MAX_DF`, `TFIDF_MIN_DF`, `TFIDF_MAX_FEATURES`, `TFIDF_SUBLINEAR_TF`, `TFIDF_NORM`, `TFIDF_SMOOTH_IDF`)
 - Lemmatization parameters (`LANGUAGE`, `KEEP_POS`, `FAST_LEMMATIZATION`)
 - Document filtering (`MIN_CHARS`, `MAX_CHARS`)
 - LSH deduplication settings (`GO_REMOVE_NEAR_DUPLICATES`, `LSH_THRESHOLD`, `LSH_NUM_PERM`, `LSH_MAX_TOKENS`)
