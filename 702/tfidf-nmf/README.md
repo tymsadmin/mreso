@@ -29,8 +29,21 @@ The project uses **Python 3.13** (see `pyproject.toml`) and **[uv](https://githu
 
 ### 2.1 Prerequisites
 
-- `uv` installed (see the official `uv` documentation).
-  - `uv` will automatically use/install a Python 3.13 compatible with `pyproject.toml`.
+You need **uv** installed on your machine. If you don't have it yet, use the standalone installation method (recommended):
+
+**macOS and Linux**
+```bash
+curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
+```
+
+**Windows**
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"
+```
+
+> **Important:** Restart your terminal after installation to ensure `uv` is recognized. You can verify the installation by running `uv --version`.
+
+`uv` will automatically manage the Python version (3.13) required for this project; you do not need to install Python manually.
 
 ### 2.2 Installing dependencies
 
